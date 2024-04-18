@@ -5,17 +5,34 @@ function App() {
   const [todoValueTemp, setTodoValueTemp] = useState('');
   const [todoValues, setTodoValues] = useState([]);
 
-  const inputValue = (e) => {
-    setTodoValueTemp(e.target.value);
+  const inputValue = (event) => {
+    setTodoValueTemp(event.target.value);
   };
   const onRegistrationButton = () => {
-    setTodoValues([...todoValues, { id: Date.now(), text: todoValueTemp }]);
-    console.log(todoValues);
+    setTodoValues([
+      ...todoValues,
+      { id: Date.now(), text: todoValueTemp, isEdit: false },
+    ]);
     setTodoValueTemp('');
   };
 
-  const deletegg = (id) => {
-    setTodoValues((todos) => todos.filter((todo) => todo.id !== id));
+  const onDeleteButton = (id) => {
+    setTodoValues((todos) => {
+      // console.log(todos);
+      return todos.filter((todo) => {
+        return todo.id !== id;
+      });
+    });
+  };
+
+  const onModify = (id) => {
+    const newTodos = todoValues.map((todo) => {
+      if (todo.id === id) {
+        todo.isEdit = true;
+      }
+      return todo;
+    });
+    console.log(newTodos);
   };
 
   return (
@@ -27,6 +44,11 @@ function App() {
               type='text'
               className='todo__input'
               onChange={inputValue}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  onRegistrationButton();
+                }
+              }}
               value={todoValueTemp}
             />
             <button
@@ -55,16 +77,24 @@ function App() {
               </thead>
               <tbody>
                 {todoValues.map((item, i) => {
-                  console.log(item);
                   return (
                     <tr className='todo__tr' key={i}>
                       <td>No.{i + 1}</td>
-                      <td>{item.text}</td>
                       <td>
-                        <button type='button'>수정</button>
+                        {!item.isEdit && <span>{item.text}</span>}
+                        {item.isEdit && <input type='text' value={item.text} />}
                       </td>
                       <td>
-                        <button type='button' onClick={() => deletegg(item.id)}>
+                        <button type='button' onClick={() => onModify(item.id)}>
+                          수정
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          type='button'
+                          onClick={() => onDeleteButton(item.id)}
+                        >
+                          {item.id}
                           삭제
                         </button>
                       </td>
