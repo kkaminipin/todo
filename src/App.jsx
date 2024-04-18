@@ -14,6 +14,10 @@ function App() {
     setTodoValueTemp('');
   };
 
+  const deletegg = (id) => {
+    setTodoValues((todos) => todos.filter((todo) => todo.id !== id));
+  };
+
   return (
     <>
       <div className='wrap'>
@@ -50,22 +54,23 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {/* {todoValues.map((item, i) => {
+                {todoValues.map((item, i) => {
+                  console.log(item);
                   return (
                     <tr className='todo__tr' key={i}>
                       <td>No.{i + 1}</td>
-                      <td>{item}</td>
+                      <td>{item.text}</td>
                       <td>
                         <button type='button'>수정</button>
                       </td>
                       <td>
-                        <button type='button' onClick={deletegg}>
+                        <button type='button' onClick={() => deletegg(item.id)}>
                           삭제
                         </button>
                       </td>
                     </tr>
                   );
-                })} */}
+                })}
               </tbody>
             </table>
           </div>
