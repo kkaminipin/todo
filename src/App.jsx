@@ -4,6 +4,7 @@ import './App.css';
 function App() {
   const [todoValueTemp, setTodoValueTemp] = useState('');
   const [todoValues, setTodoValues] = useState([]);
+  const [todoModify, setTodoModify] = useState(false);
 
   const inputValue = (event) => {
     setTodoValueTemp(event.target.value);
@@ -11,14 +12,13 @@ function App() {
   const onRegistrationButton = () => {
     setTodoValues([
       ...todoValues,
-      { id: Date.now(), text: todoValueTemp, isEdit: false },
+      { id: Date.now(), text: todoValueTemp, isEdit: todoModify },
     ]);
     setTodoValueTemp('');
   };
 
   const onDeleteButton = (id) => {
     setTodoValues((todos) => {
-      // console.log(todos);
       return todos.filter((todo) => {
         return todo.id !== id;
       });
@@ -28,15 +28,20 @@ function App() {
   const onModify = (id) => {
     const newTodos = todoValues.map((todo) => {
       if (todo.id === id) {
-        todo.isEdit = true;
+        console.log(todo);
+        // setTodoValues([...todoValues, { isEdit: true }]);
+
+        setTodoModify(true);
+
+        console.log(todo.text);
       }
       return todo;
     });
-    console.log(newTodos);
   };
 
   return (
     <>
+      {console.log('html 시작')}
       <div className='wrap'>
         <div className='todo'>
           <div className='todo__inputFunctions'>
@@ -106,6 +111,7 @@ function App() {
           </div>
         </div>
       </div>
+      {console.log('html 끝')}
     </>
   );
 }
